@@ -3,38 +3,23 @@
 import 'database_modal.dart';
 
 class DatabaseController {
-  final dbHelper = DatabaseHelper();
-
-  Future<void> insertUser(DatabaseModel user) async {
-    final db = await dbHelper.database;
-    await db.insert(
-      'TBL_USER',
-      user.toMap(),
-    );
+  // Create
+  Future<void> addUser(DatabaseModel user) async {
+    await DatabaseModel.insert(user);
   }
 
+  // Read
   Future<List<DatabaseModel>> getUsers() async {
-    final db = await dbHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('TBL_USER');
-    return List.generate(maps.length, (i) => DatabaseModel.fromMap(maps[i]));
+    return await DatabaseModel.getAllUsers();
   }
 
+  // Update
   Future<void> updateUser(DatabaseModel user) async {
-    final db = await dbHelper.database;
-    await db.update(
-      'TBL_USER',
-      user.toMap(),
-      where: 'uid = ?',
-      whereArgs: [user.uid],
-    );
+    await DatabaseModel.update(user);
   }
 
+  // Delete
   Future<void> deleteUser(int uid) async {
-    final db = await dbHelper.database;
-    await db.delete(
-      'TBL_USER',
-      where: 'uid = ?',
-      whereArgs: [uid],
-    );
+    await DatabaseModel.delete(uid);
   }
 }

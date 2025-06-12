@@ -28,93 +28,94 @@ class _DatabaseViewState extends State<DatabaseView> {
       _nameController.text = user.name;
       _cityController.text = user.city;
       _selectedGender = user.gender;
+    } else {
+      _nameController.clear();
+      _cityController.clear();
+      _selectedGender = 'Male';
     }
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      elevation: 5,
-      isScrollControlled: true,
-      builder: (_) => Container(
-        padding: EdgeInsets.only(
-          top: 15,
-          left: 15,
-          right: 15,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 15,
-        ),
-        child: Form(
+      builder: (context) => AlertDialog(
+        title: Text(user == null ? 'Add User' : 'Edit User'),
+        content: Form(
           key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _cityController,
-                decoration: const InputDecoration(labelText: 'City'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter city';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: _selectedGender,
-                items: ['Male', 'Female', 'Other']
-                    .map((gender) => DropdownMenuItem(
-                          value: gender,
-                          child: Text(gender),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedGender = value!;
-                  });
-                },
-                decoration: const InputDecoration(labelText: 'Gender'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    if (user == null) {
-                      await _controller.insertUser(
-                        DatabaseModel(
-                          name: _nameController.text,
-                          city: _cityController.text,
-                          gender: _selectedGender,
-                        ),
-                      );
-                    } else {
-                      await _controller.updateUser(
-                        DatabaseModel(
-                          uid: user.uid,
-                          name: _nameController.text,
-                          city: _cityController.text,
-                          gender: _selectedGender,
-                        ),
-                      );
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter name';
                     }
-                    _nameController.clear();
-                    _cityController.clear();
-                    Navigator.pop(context);
-                    setState(() {});
-                  }
-                },
-                child: Text(user == null ? 'Create New' : 'Update'),
-              ),
-            ],
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _cityController,
+                  decoration: const InputDecoration(labelText: 'City'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter city';
+                    }
+                    return null;
+                  },
+                ),
+                DropdownButtonFormField<String>(
+                  value: _selectedGender,
+                  items: ['Male', 'Female', 'Other']
+                      .map((gender) => DropdownMenuItem(
+                            value: gender,
+                            child: Text(gender),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedGender = value!;
+                    });
+                  },
+                  decoration: const InputDecoration(labelText: 'Gender'),
+                ),
+              ],
+            ),
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                if (user == null) {
+                  await _controller.addUser(
+                    DatabaseModel(
+                      name: _nameController.text,
+                      city: _cityController.text,
+                      gender: _selectedGender,
+                    ),
+                  );
+                } else {
+                  await _controller.updateUser(
+                    DatabaseModel(
+                      uid: user.uid,
+                      name: _nameController.text,
+                      city: _cityController.text,
+                      gender: _selectedGender,
+                    ),
+                  );
+                }
+                Navigator.pop(context);
+                setState(() {});
+              }
+            },
+            child: Text(user == null ? 'Add' : 'Update'),
+          ),
+        ],
       ),
     );
   }
