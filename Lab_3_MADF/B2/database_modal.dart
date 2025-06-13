@@ -16,6 +16,7 @@ class DatabaseModel {
     required this.gender,
   });
 
+
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -60,6 +61,13 @@ class DatabaseModel {
     );
   }
 
+  static Future<void> insert(DatabaseModel user) async {
+    final db = await database;
+    await db.insert('TBL_USER', {
+      'name': user.name,
+      'city': user.city,
+      'gender': user.gender,
+    });
   // CRUD Operations
   static Future<void> insert(DatabaseModel user) async {
     final db = await database;
@@ -69,6 +77,16 @@ class DatabaseModel {
   static Future<List<DatabaseModel>> getAllUsers() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('TBL_USER');
+    
+    return List.generate(maps.length, (i) {
+      return DatabaseModel(
+        uid: maps[i]['uid'],
+        name: maps[i]['name'],
+        city: maps[i]['city'],
+        gender: maps[i]['gender'],
+      );
+    });
+
     return List.generate(maps.length, (i) => DatabaseModel.fromMap(maps[i]));
   }
 
@@ -76,6 +94,11 @@ class DatabaseModel {
     final db = await database;
     await db.update(
       'TBL_USER',
+      {
+        'name': user.name,
+        'city': user.city,
+        'gender': user.gender,
+      },
       user.toMap(),
       where: 'uid = ?',
       whereArgs: [user.uid],

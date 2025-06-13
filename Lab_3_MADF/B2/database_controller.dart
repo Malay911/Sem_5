@@ -3,6 +3,7 @@
 import 'database_modal.dart';
 
 class DatabaseController {
+  
   // Create
   Future<void> addUser(DatabaseModel user) async {
     await DatabaseModel.insert(user);
