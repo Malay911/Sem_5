@@ -1,0 +1,41 @@
+import 'utils/import_export.dart';
+
+class SQLiteDatabase {
+  static final SQLiteDatabase instance = SQLiteDatabase._init();
+  static Database? _database;
+
+  SQLiteDatabase._init();
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB("Student.db");
+    return _database!;
+  }
+
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDB,
+    );
+  }
+
+  Future _createDB(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE Student (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        enrollment_number TEXT NOT NULL,
+        grade_12 REAL,
+        diploma_cgpa REAL,
+        current_cgpa REAL,
+        email TEXT,
+        phone TEXT,
+        city TEXT
+      )
+    ''');
+  }
+}
