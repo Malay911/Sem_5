@@ -14,7 +14,7 @@ class DatabaseController extends GetxController {
   Future<void> fetchStudents() {
     final db = SQLiteDatabase.database;
     return db.then((database) async {
-      final result = await database.query("Student");
+      final result = await database.query("TBL_Student");
       students.value =
           result.map((json) => SQLiteDatabaseModel.fromMap(json)).toList();
     });
@@ -23,7 +23,7 @@ class DatabaseController extends GetxController {
   Future<void> fetchUniversity() {
     final db = SQLiteDatabase.database;
     return db.then((database) async {
-      final result = await database.query("University");
+      final result = await database.query("TBL_University");
       universities.value =
           result.map((json) => University.fromMap(json)).toList();
     });
@@ -31,38 +31,38 @@ class DatabaseController extends GetxController {
 
   Future<void> addStudent(SQLiteDatabaseModel student) async {
     final db = await SQLiteDatabase.database;
-    await db.insert("Student", student.toMap());
+    await db.insert("TBL_Student", student.toMap());
     fetchStudents();
   }
 
   Future<void> addUniversity(University university) async {
     final db = await SQLiteDatabase.database;
-    await db.insert("University", university.toMap());
+    await db.insert("TBL_University", university.toMap());
     fetchUniversity();
   }
 
   Future<void> deleteStudent(int id) async {
     final db = await SQLiteDatabase.database;
-    await db.delete("Student", where: "id = ?", whereArgs: [id]);
+    await db.delete("TBL_Student", where: "id = ?", whereArgs: [id]);
     fetchStudents();
   }
 
   Future<void> deleteUniversity(int universityId) async {
     final db = await SQLiteDatabase.database;
-    await db.delete('university', where: 'id = ?', whereArgs: [universityId]);
+    await db.delete('TBL_University', where: 'id = ?', whereArgs: [universityId]);
     fetchUniversity();
   }
 
   Future<void> updateStudent(SQLiteDatabaseModel student) async {
     final db = await SQLiteDatabase.database;
-    await db.update("Student", student.toMap(),
+    await db.update("TBL_Student", student.toMap(),
         where: "id = ?", whereArgs: [student.id]);
     fetchStudents();
   }
 
   Future<void> updateUniversity(University university) async {
     final db = await SQLiteDatabase.database;
-    await db.update("University", university.toMap(),
+    await db.update("TBL_University", university.toMap(),
         where: "id = ?", whereArgs: [university.id]);
     fetchUniversity();
   }
