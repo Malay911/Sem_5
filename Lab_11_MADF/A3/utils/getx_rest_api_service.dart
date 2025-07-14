@@ -4,7 +4,7 @@ import 'package:lab/Lab_11_MADF/A3/getx_rest_api_search_model.dart';
 
 class GetxRestApiService {
   static const String baseUrl =
-      'https://67c3db4c89e47db83dd2a1c3.mockapi.io/API_CRUD';
+      'API_LINK';
 
   Future<List<GetxRestApiModel>> fetchData() async {
     final response = await http.get(Uri.parse(baseUrl));
