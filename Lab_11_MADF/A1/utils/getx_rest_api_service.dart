@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'import_export.dart';
 
 class GetxRestApiService {
-  static const String baseUrl = 'https://67c3db4c89e47db83dd2a1c3.mockapi.io/API_CRUD';
+  static const String baseUrl = 'API_LINK';
 
   Future<List<GetxRestApiModel>> fetchData() async {
     final response = await http.get(Uri.parse(baseUrl));
