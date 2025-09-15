@@ -1,0 +1,95 @@
+void selectionSort(int arr[],int n){
+	for(int i=0;i<n-1;i++){
+		int min_idx=i;
+		for(int j=i+1;j<n;j++){
+			if(arr[j]<arr[min_idx]){
+				min_idx=j;
+			}
+		}
+		if(min_idx!=i){
+			int temp=arr[i];
+			arr[i]=arr[min_idx];
+			arr[min_idx]=temp;
+		}
+	}
+}
+
+void insertionSort(int arr[],int n){
+	int i,j,key;
+	for(i=1;i<n;i++){
+		key=arr[i];
+		j=i-1;
+		while(j>=0 && arr[j]>key){
+			arr[j+1]=arr[j];
+			j=j-1;
+		}
+		arr[j+1]=key;
+	}
+}
+
+void BubbleSort(int arr[],int n){
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n-1;j++){
+			if(arr[j]>arr[j+1]){
+				int temp=arr[j];
+				arr[j]=arr[j+1];
+				arr[j+1]=temp;
+			}
+		}
+	}
+}
+
+
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        int temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+        heapify(arr, n, largest);
+    }
+}
+
+void heapsort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    for (int i = n - 1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+        heapify(arr, i, 0);
+    }
+}
+
+
+int binarySearch(int arr[], int size, int target){
+    int left=0;
+    int right=size-1;
+    while(right>=left){
+        int middle=(left+right)/2;
+        if (arr[middle] == target) return middle;
+        else if (arr[middle] < target) left = middle;
+        else right = middle;
+    }
+    return -1;
+}
+
+int binarySearchRecursion(int arr[], int left, int right, int target) {
+    if (right >= left) {
+        int middle = left + (right - left) / 2;
+        if (arr[middle] == target) return middle;
+        if (arr[middle] > target) return binarySearchRecursion(arr, left, middle - 1, target);
+        return binarySearchRecursion(arr, middle + 1, right, target);
+    }
+    return -1;
+}
