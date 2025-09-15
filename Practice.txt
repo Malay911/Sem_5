@@ -72,16 +72,22 @@ void heapsort(int arr[], int n) {
 }
 
 
-int binarySearch(int arr[], int size, int target){
-    int left=0;
-    int right=size-1;
-    while(right>=left){
-        int middle=(left+right)/2;
-        if (arr[middle] == target) return middle;
-        else if (arr[middle] < target) left = middle;
-        else right = middle;
-    }
-    return -1;
+int BinarySearch(int arr[],int s,int n){
+	int i;
+	int left=0;
+	int right=n-1;
+	while(right>=left){
+		int mid=(left+right)/2;
+		if(arr[mid]==s){
+			return mid;
+		}
+		else if(arr[i]<mid){
+			left=mid+1;
+		}
+		else{
+			right=mid-1	;
+		}
+	}
 }
 
 int binarySearchRecursion(int arr[], int left, int right, int target) {
